@@ -19,7 +19,8 @@ namespace TaskManagerWeb.Controllers
                 return RedirectToAction("Login", "Home");
 
             TasksRepository tasksRepository = new TasksRepository(new TaskManagerDb());
-            ViewData["task"] = tasksRepository.GetAll().Where(i => i.AssigneeId == AuthenticationManager.LoggedUser.Id).ToList();    
+            ViewData["task"] = tasksRepository.GetAll()
+                .Where(i => i.AssigneeId == AuthenticationManager.LoggedUser.Id || i.CreatorId == AuthenticationManager.LoggedUser.Id).ToList();    
 
             return View();
         }
@@ -83,6 +84,19 @@ namespace TaskManagerWeb.Controllers
             return View();
         }
         [HttpPost]
+        public ActionResult ChangeStatus(Task task)
+        {
+            if (AuthenticationManager.LoggedUser == null)
+                return RedirectToAction("Login", "Home");
+
+            task.LastModified = DateTime.Now;
+
+            TasksRepository tasksRepository = new TasksRepository(new TaskManagerDb());
+            tasksRepository.Save(task);
+
+            return RedirectToAction("EditComment", "CommentsManager", new { taskId = task.Id});
+        }
+        [HttpPost]
         public ActionResult EditTask(Task task)
         {
             if (AuthenticationManager.LoggedUser == null)
@@ -95,7 +109,6 @@ namespace TaskManagerWeb.Controllers
 
             return RedirectToAction("Index", "TasksManager");
         }
-
         public ActionResult DeleteTask(int id)
         {
             if (AuthenticationManager.LoggedUser == null)

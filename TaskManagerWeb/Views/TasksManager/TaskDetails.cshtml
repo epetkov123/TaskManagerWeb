@@ -36,6 +36,7 @@
                     </ul>
                 </td>
             </tr>
+
             @{
                 var task = (Task)ViewData["task"];
             }
@@ -63,12 +64,42 @@
             <tr>
                 @if (task.IsDone == true)
                 {
-                    <td>Status: Done</td>
+                    <td>Status: Completed</td>
                 }
                 else
                 {
                     <td>Status: In progress</td>
                 }
+            </tr>
+            <tr>
+                <td>
+                    <form action="/TasksManager/ChangeStatus" method="post">
+                        <input type="hidden" name="Id" value="@task.Id" />
+                        <input type="hidden" name="Title" value="@task.Title" />
+                        <input type="hidden" name="Description" value="@task.Description" />
+                        <input type="hidden" name="TimeDone" value="@task.TimeDone" />
+                        <input type="hidden" name="LastModified" value="@task.LastModified" />
+                        <input type="hidden" name="DateCreated" value="@task.DateCreated" />
+                        <input type="hidden" name="CreatorId" value="@task.CreatorId" />
+                        <input type="hidden" name="AssigneeId" value="@task.AssigneeId" />
+                        <fieldset>
+                            <legend>Change Status</legend>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <select name="IsDone">
+                                            <option value="true">Completed</option>
+                                            <option value="false">In progress</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><input type="submit" value="Save" />&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </form>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -113,7 +144,7 @@
                             <tr>
                                 <td>@time.User.Username</td>
                                 <td>@time.TimeTaken</td>
-                                <td>@time.DateTaken.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@time.DateTaken</td>
                                 <td><a href="@deleteLink">delete</a></td>
                             </tr>
                         }
