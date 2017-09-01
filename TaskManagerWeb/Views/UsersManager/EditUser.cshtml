@@ -1,0 +1,82 @@
+﻿@{
+    Layout = null;
+}
+
+@using DataAccess.Entity;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Task Book</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Edit User</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        User user = (User)ViewData["user"];
+                    }
+                    <form action="/UsersManager/EditUser" method="post">
+                        <input type="hidden" name="Id" value="@user.Id" />
+                        <fieldset>
+                            <legend>Edit User</legend>
+                            <table>
+                                <tr>
+                                    <td>First Name:</td>
+                                    <td><input type="text" name="FirstName" value="@user.FirstName" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Last Name:</td>
+                                    <td><input type="text" name="LastName" value="@user.LastName" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Username:</td>
+                                    <td><input type="text" name="Username" value="@user.Username" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Password:</td>
+                                     <td><input type="password" name="Password" value="@user.Password" /></td>
+                                </tr>
+                                @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser.IsAdmin == true)
+                                {
+                                    <tr>
+                                        <td>Is Admin:</td>
+                                        <td><input type="text" name="IsAdmin" value="@user.IsAdmin" /></td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="2"><input type="submit" value="Save" />&nbsp;<a href="/UsersManager/Index">Cancel</a></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

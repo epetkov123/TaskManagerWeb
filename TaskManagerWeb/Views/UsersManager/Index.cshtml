@@ -1,0 +1,85 @@
+﻿    @{
+    Layout = null;
+}
+
+@using DataAccess.Entity;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Task Book</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Manage Users</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser.IsAdmin == true)
+                    {
+                        <a href="/UsersManager/EditUser">Create new</a>
+                    }
+                    <table border="1">
+                        <tr>
+                            <td>Username</td>  
+                            <td>First Name</td>
+                            <td>Last Name</td>
+                            <td>Admin</td>
+                            @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser.IsAdmin == true)
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+                        </tr>
+                    @foreach(User user in (List<User>)ViewData["users"])
+                    {
+                            var editLink = "/UsersManager/EditUser?id=" + user.Id;
+                            var deleteLink = "/UsersManager/DeleteUser?id=" + user.Id;
+                        <tr>
+                            <td>@user.Username</td>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            @if(user.IsAdmin == true)
+                            {
+                                <td>Yes</td>
+                            }
+                            else
+                            {
+                                <td>No</td>
+                            }
+                            @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser.IsAdmin == true)
+                            {
+                                <td><a href="@editLink">edit</a></td>
+                                <td><a href="@deleteLink">delete</a></td>
+                            }
+                        </tr>
+                    }
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

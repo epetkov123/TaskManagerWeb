@@ -1,0 +1,68 @@
+﻿
+@{
+    Layout = null;
+}
+
+@using DataAccess.Entity;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Task Manager</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Edit Comment</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        Comment comment = (Comment)ViewData["comments"];
+                    }
+                    <form action="/CommentsManager/EditComment" method="post">
+                        <fieldset>
+                            <input type="hidden" name="Id" value="@comment.Id" />
+                            <input type="hidden" name="TaskId" value="@comment.TaskId" />
+                            <input type="hidden" name="UserId" value="@comment.UserId" />
+                            <legend>Edit Comment</legend>
+                            <table>
+                                <tr>
+                                    <td>Body:</td>
+                                    <td>
+                                        <input type="text" name="Body" value="@comment.Body" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><input type="submit" value="Save" />&nbsp;<a href="/TasksManager/TaskDetails?id=@comment.TaskId">Cancel</a></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

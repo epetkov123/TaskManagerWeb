@@ -1,0 +1,85 @@
+﻿@{
+    Layout = null;
+}
+
+@using DataAccess.Entity;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Task Manager</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Edit Task</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        Task task = (Task)ViewData["task"];
+                    }
+                    <form action="/TasksManager/EditTask" method="post">
+                        <input type="hidden" name="Id" value="@task.Id" />
+                        <input type="hidden" name="LastModified" value="@task.LastModified" />
+                        <input type="hidden" name="DateCreated" value="@task.DateCreated" />
+                        <input type="hidden" name="IsDone" value="@task.IsDone" />
+                        <input type="hidden" name="CreatorId" value="@task.CreatorId" />
+                        <fieldset>
+                            <legend>Edit Task</legend>
+                            <table>
+                                <tr>
+                                    <td>Title:</td>
+                                    <td>
+                                        <input type="text" name="Title" value="@task.Title" />
+                                    </td>
+                                    <td>Description:</td>
+                                    <td>
+                                        <input type="text" name="Description" value="@task.Description" />
+                                    </td>
+                                    <td>Time Given:</td>
+                                    <td>
+                                        <input type="text" name="TimeDone" value="@task.TimeDone" />
+                                    </td>
+                                    <td>
+                                        <select name="AssigneeId">
+                                            @foreach (User user in (List<User>)ViewData["users"])
+                                            {
+                                                <option value="@user.Id">@user.Username</option>
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><input type="submit" value="Save" />&nbsp;<a href="/TasksManager/Index">Cancel</a></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

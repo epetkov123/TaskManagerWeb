@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+}
+
+@using DataAccess.Entity;
+@using System.Globalization;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Task Manager</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Manage Tasks</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="/TasksManager/EditTask">Create new</a>
+                    <table border="1">
+                        <tr>
+                            <td>Title</td>
+                            <!-- 
+                            <td>Description</td>
+                            <td>Time given(in days)</td>
+                            <td>Creator</td>
+                            <td>User Assigned</td>
+                            <td>Date Created</td>
+                            <td>Last Modified</td>
+                            <td>Status</td> 
+                            -->
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        @foreach (Task task in (List<Task>)ViewData["task"])
+                        {
+                            var detailsLink = "/TasksManager/TaskDetails?id=" + task.Id;
+                            var editLink = "/TasksManager/EditTask?id=" + task.Id;
+                            var deleteLink = "/TasksManager/DeleteTask?id=" + task.Id;
+                            <tr>
+                                <td>@task.Title</td>
+                                <!--
+                                <td>@task.Description</td>
+                                <td>@task.TimeDone</td>
+                                <td>@task.Creator.Username</td>
+                                <td>@task.Assignee.Username</td>
+                                <td>@task.DateCreated.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@task.LastModified.Value.ToString("dd/MM/yyyy")</td>
+                                @if(task.IsDone == true)
+                                {
+                                    <td>Done</td>
+                                }
+                                else
+                                {
+                                    <td>In progress</td>
+                                }
+                                -->
+                                <td><a href="@detailsLink">details</a></td>
+                                <td><a href="@editLink">edit</a></td>
+                                <td><a href="@deleteLink">delete</a></td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

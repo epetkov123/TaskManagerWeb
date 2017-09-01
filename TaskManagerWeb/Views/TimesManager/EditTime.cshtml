@@ -1,0 +1,70 @@
+﻿
+
+@{
+    Layout = null;
+}
+
+@using DataAccess.Entity;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Task Manager</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Edit Time</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        Time time = (Time)ViewData["times"];
+                    }
+                    <form action="/TimesManager/EditTime" method="post">
+                        <fieldset>
+                            <input type="hidden" name="Id" value="@time.Id" />
+                            <input type="hidden" name="TaskId" value="@time.TaskId" />
+                            <input type="hidden" name="UserId" value="@time.UserId" />
+                            <input type="hidden" name="DateTaken" value="@time.DateTaken" />
+                            <legend>Edit Time</legend>
+                            <table>
+                                <tr>
+                                    <td>Hours worked:</td>
+                                    <td>
+                                        <input type="text" name="TimeTaken" value="@time.TimeTaken" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><input type="submit" value="Save" />&nbsp;<a href="/TasksManager/TaskDetails?id=@time.TaskId">Cancel</a></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

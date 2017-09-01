@@ -1,0 +1,126 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@using DataAccess.Entity;
+@using System.Globalization;
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TaskManager</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h1 style="font-size:26px;">Task Details</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style:none;">
+                        <li style="float:left; width:150px; text-decoration:none; color:black;"><a href="/TasksManager/Index">Manage Tasks</a></li>
+                        <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/UsersManager/Index">Manage Users</a></li>
+                        @if (TaskManagerWeb.Models.AuthenticationManager.LoggedUser == null)
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li style="float: left; width: 150px; text-decoration: none; color: black;"><a href="/Home/Logout">Logout</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            @{
+                var task = (Task)ViewData["task"];
+            }
+            <tr>
+                <td>Task Title: @task.Title</td>
+            </tr>
+            <tr>
+                <td>Description: @task.Description</td>
+            </tr>
+            <tr>
+                <td>Assigned User: @task.Assignee.Username</td>
+            </tr>
+            <tr>
+                <td>Creator: @task.Creator.Username</td>
+            </tr>
+            <tr>
+                <td>Time given(in days): @task.TimeDone</td>
+            </tr>
+            <tr>
+                <td>Date Created: @task.DateCreated<!--.Value.ToString("dd/MM/yyyy")--></td>
+            </tr>
+            <tr>
+                <td>Last Modified: @task.LastModified<!--.Value.ToString("dd/MM/yyyy")--></td>
+            </tr>
+            <tr>
+                @if (task.IsDone == true)
+                {
+                    <td>Status: Done</td>
+                }
+                else
+                {
+                    <td>Status: In progress</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    <strong>Comments</strong>
+                    <a href="/CommentsManager/EditComment/?taskId=@task.Id">Create new</a>
+                    <table border="1">
+                        <tr>
+                            <td>Comment</td>
+                            <td>Creator</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        @foreach (Comment comment in (List<Comment>)ViewData["comments"])
+                        {
+                            var editLink = "/CommentsManager/EditComment?id=" + comment.Id;
+                            var deleteLink = "/CommentsManager/DeleteComment?id=" + comment.Id;
+                            <tr>
+                                <td>@comment.Body</td>
+                                <td>@comment.User.Username</td>
+                                <td><a href="@editLink">edit</a></td>
+                                <td><a href="@deleteLink">delete</a></td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>TimeLog</strong>
+                    <a href="/TimesManager/EditTime/?taskId=@task.Id">Create new</a>
+                    <table border="1">
+                        <tr>
+                            <td>User worked</td>
+                            <td>Time worked(in hours)</td>
+                            <td>Date recorded</td>
+                            <td></td>
+                        </tr>
+                        @foreach (Time time in (List<Time>)ViewData["times"])
+                        {
+                            //var editLink = "/TimesManager/EditTime?id=" + time.Id;
+                            var deleteLink = "/TimesManager/DeleteTime?id=" + time.Id;
+                            <tr>
+                                <td>@time.User.Username</td>
+                                <td>@time.TimeTaken</td>
+                                <td>@time.DateTaken.Value.ToString("dd/MM/yyyy")</td>
+                                <td><a href="@deleteLink">delete</a></td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
