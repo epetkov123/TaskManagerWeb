@@ -1,5 +1,4 @@
-﻿using System;
-using DataAccess.Entity;
+﻿using DataAccess.Entity;
 using DataAccess.Repository;
 
 namespace DataAccess.Service
@@ -10,7 +9,6 @@ namespace DataAccess.Service
 
         public void AuthenticateUser(string username, string password)
         {
-            //UsersRepository userRepo = RepositoryFactory.GetUsersRepository();
             UsersRepository userRepo = new UsersRepository(new TaskManagerDb());
             LoggedUser = userRepo.GetByUsernameAndPassword(username, password);
         }
